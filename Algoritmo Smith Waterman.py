@@ -6,6 +6,7 @@ import pandas as pd
 scores = {'Match': 3 , 'Missmatch': -1, 'Gap': -2}
 vertical, horizontal = 'CGCCCUGGUUCAUAUAAUAUUCCAAAGGAGCAUAUGGACUCAGCAUUGCGGGGGUCGAGUAUAUAGUAAGAAAGGGGUCCGAUUCCGAGCUUCUUAGAUUGUUUGUUCUAAUGGCUCAAUGUCCGACCCGGUGCGUCAGAGUGCAGUCCAUAUCAUGAGCCAAAGGCCACGCCAAUGAUGGCCUCACCCCACCUACUGUC', 'CGCCCUGGUUCAUAUUCCAAAGGAGCAUAUGGACUCAGCAUUGCGGGGGUCGAGUAUAUAGUAAGAAAGGGGUCCGAUUAAAUUCCGAGCUUCUUAGGCUAGAUUCGAUUGUUUGCAUUGUUCUAAUGGCUCA'
 #vertical, horizontal = 'ACGC' , 'TCG'
+#vertical, horizontal = 'UCGUUACGUAUCGUGUUUACGUUACGCAACACGACCUUACCCUACCGCAGGGCAGCACAAAACGCAUGCUUUCCCCACAAUGUGCAUCCGCGCAAGUUGCCCAUCACGCCAUUUCAGGGGGACGUAACCCGAAAUUGUGUCCGAACGAAAUUGCAAGUCAAGGGGCUUGGAAGCUAAUGAUAAUGCCCCGAUAUCAACCA', 'UCGUAUCGUGUUUACGCAACACGACCGCAGGGCAGCACAAAACGCAUGCUUUCCCCACAAUGUGCAUCCGCGCAAUUCAAGUUGCCCAUCCCAUCACGCCAUUUCAGGGGGACGUAACCCGAAAGUAAAUUGU'
 caminho = []
 
 #funcoes de salvar no arquivo e tratamento de strings ----------------------
@@ -14,7 +15,7 @@ def salvarResultados(matriz, alinhamento):
 
     dados = pd.DataFrame(data=matriz)
     dados.to_excel('tabela_do_alinhamento.xls', index = False)
-
+    print(alinhamento)
     with open('alinhamento.txt', 'w') as arquivo:
         arquivo.write('Alinhamento:\n')
         arquivo.write(alinhamento[0]+'\n')
@@ -88,16 +89,9 @@ def swGlobal(matriz):
 def atualizarDirecao(linha, coluna):
     global caminho
 
-    #for decrescente pois as celulas perto do ponto incial estao no fim da lista
-    if( linha <= (len(vertical)//2) - 2 ):
-        for celula in range(len(caminho), 0, 1):
-            if( caminho [celula] [0] == linha and  caminho [celula] [1] == coluna):
-                return caminho [celula] [2]
-    else:
-        #for crescente pois estamos procurando posicoes longe do ponto inicial que consequentemente esta no incio da lista
-        for celula in range(len(caminho)):
-            if( caminho [celula] [0] == linha and  caminho [celula] [1] == coluna):
-                return caminho [celula] [2]
+    for celula in range(len(caminho)):
+        if( caminho [celula] [0] == linha and  caminho [celula] [1] == coluna):
+            return caminho [celula] [2]
 
     return None
 
@@ -117,6 +111,7 @@ def backTracing(matriz):
             coluna-=1
             direcao = atualizarDirecao(linha, coluna)
         elif(direcao == 'esquerda'):
+            print(matriz [len(vertical) + 1] [coluna] )
             alinhamento[0] += '-'  
             alinhamento[1] += matriz [len(vertical) + 1] [coluna] 
             coluna-=1
@@ -126,8 +121,7 @@ def backTracing(matriz):
             alinhamento[1] += '-' 
             linha+=1
             direcao = atualizarDirecao(linha, coluna)
-
-        
+   
 def main():
     matriz = []
     alinhamento = []
