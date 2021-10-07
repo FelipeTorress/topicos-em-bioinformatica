@@ -15,7 +15,7 @@ def salvarResultados(matriz, alinhamento):
 
     dados = pd.DataFrame(data=matriz)
     dados.to_excel('tabela_do_alinhamento.xls', index = False)
-    print(alinhamento)
+
     with open('alinhamento.txt', 'w') as arquivo:
         arquivo.write('Alinhamento:\n')
         arquivo.write(alinhamento[0]+'\n')
@@ -111,7 +111,6 @@ def backTracing(matriz):
             coluna-=1
             direcao = atualizarDirecao(linha, coluna)
         elif(direcao == 'esquerda'):
-            print(matriz [len(vertical) + 1] [coluna] )
             alinhamento[0] += '-'  
             alinhamento[1] += matriz [len(vertical) + 1] [coluna] 
             coluna-=1
